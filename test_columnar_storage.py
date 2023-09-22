@@ -1,5 +1,4 @@
 import unittest
-
 from storage import ColumnarStorage
 
 
@@ -22,6 +21,13 @@ class TestColumnarStorage(unittest.TestCase):
         self.storage.remove_column('age')
         self.assertIsNone(self.storage.get_column('age'))
         self.assertEqual(self.storage.get_column('name'), ['Alice', 'Bob', 'Charlie'])
+
+    def test_compression(self):
+        self.storage.add_column('name', ['Alice', 'Bob', 'Charlie'])
+        compressed_data = self.storage.columns['name']
+        self.assertNotEqual(compressed_data, ['Alice', 'Bob', 'Charlie'])
+        decompressed_data = self.storage.get_column('name')
+        self.assertEqual(decompressed_data, ['Alice', 'Bob', 'Charlie'])
 
 
 if __name__ == '__main__':
